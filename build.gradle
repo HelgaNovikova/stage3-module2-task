@@ -1,5 +1,7 @@
 plugins {
     id 'java-base'
+//    id 'org.springframework.boot' version '3.0.4'
+//    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 wrapper {
@@ -19,6 +21,10 @@ subprojects {
     }
 
     dependencies {
+        implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+        implementation "org.springframework:spring-core:$springVersion"
         implementation "org.springframework:spring-context:$springVersion"
 
         testImplementation "org.springframework:spring-test:$springVersion"

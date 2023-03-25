@@ -1,11 +1,18 @@
 plugins {
     id 'application'
+    id 'org.springframework.boot' version '3.0.4'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 mainClassName = 'com.mjc.school.Main'
 
 dependencies {
+    implementation project(':module-repository')
+    implementation project(':module-service')
     implementation project(':module-web')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework:spring-core:6.0.6'
+    implementation 'org.springframework:spring-context:6.0.6'
 }
 
 run {
