@@ -4,6 +4,8 @@ import com.mjc.school.controller.BaseController;
 import com.mjc.school.controller.annotation.CommandBody;
 import com.mjc.school.controller.annotation.CommandHandler;
 import com.mjc.school.controller.annotation.CommandParam;
+import com.mjc.school.service.dto.AuthorCreateDto;
+import com.mjc.school.service.dto.NewsCreateDto;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,15 +27,13 @@ public class CommandExecutor {
 
     @Autowired
     public CommandExecutor(List<BaseController<?, ?, ?>> controllers) {
-        methods = controllers.stream()
+        this.methods = controllers.stream()
                 .flatMap(this::gatHandlers)
                 .collect(Collectors.toMap(this::getHandlerName, h -> h));
-
     }
 
     private Stream<Handler> gatHandlers(BaseController<?, ?, ?> c) {
-        Method[] methods = AopUtils.getTargetClass(c).getDeclaredMethods();
-        return Arrays.stream(methods)
+        return Arrays.stream(AopUtils.getTargetClass(c).getDeclaredMethods())
                 .filter(m -> !m.isSynthetic())
                 .filter(m -> m.isAnnotationPresent(CommandHandler.class))
                 .map(m -> new Handler(c, m));
@@ -47,7 +47,7 @@ public class CommandExecutor {
         return annotation.value();
     }
 
-    public <R> R execute(String handlerName, Object body, Map<String, Object> params) {
+    public <R> R execute(String handlerName, Map<String, String> body, Map<String, Object> params) {
         Handler handler = methods.get(handlerName);
         if (handler == null) {
             throw new IllegalArgumentException("Handler for %s not found. Only %s exists."
@@ -58,7 +58,8 @@ public class CommandExecutor {
         for (Parameter p : parameters) {
             CommandParam commandParam = p.getAnnotation(CommandParam.class);
             if (p.isAnnotationPresent(CommandBody.class)) {
-                args.add(body);
+
+                args.add(convertBody(body, p.getType()));
             } else if (commandParam != null) {
                 args.add(params.get(commandParam.value()));
             } else {
@@ -75,6 +76,15 @@ public class CommandExecutor {
                 throw r;
             throw new RuntimeException(e.getTargetException());
         }
+    }
+
+    private Object convertBody(Map<String, String> body, Class<?> dtoClass) {
+        if (dtoClass.equals(AuthorCreateDto.class)) {
+            return DtoMapper.INSTANCE.toAuthors(body);
+        } else if (dtoClass.equals(NewsCreateDto.class)) {
+            return DtoMapper.INSTANCE.toNews(body);
+        } else throw new IllegalArgumentException("Class %s is not supported for conversion");
+
     }
 
     private record Handler(BaseController<?, ?, ?> controller, Method method) {

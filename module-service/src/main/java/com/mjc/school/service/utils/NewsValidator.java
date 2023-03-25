@@ -22,7 +22,7 @@ public class NewsValidator {
     }
 
     public static boolean isContentValid(String content) {
-        return content.length() > MIN_CONTENT_LENGTH && content.length() < MAX_CONTENT_LENGTH;
+        return content.length() >= MIN_CONTENT_LENGTH && content.length() <= MAX_CONTENT_LENGTH;
     }
 
     public static void validateTitle(String title) {

@@ -8,6 +8,9 @@ public class AuthorCreateDto {
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 
+    public AuthorCreateDto() {
+    }
+
     public AuthorCreateDto(Long id, String name, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;

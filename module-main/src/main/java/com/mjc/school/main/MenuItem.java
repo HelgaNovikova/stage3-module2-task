@@ -1,4 +1,4 @@
-package com.mjc.school.menu;
+package com.mjc.school.main;
 
 import java.util.Scanner;
 

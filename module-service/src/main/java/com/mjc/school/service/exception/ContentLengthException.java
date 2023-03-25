@@ -2,12 +2,9 @@ package com.mjc.school.service.exception;
 
 public class ContentLengthException extends CustomException {
 
-    public ContentLengthException(String message) {
-        super(message);
-    }
+    public static final String CODE = "000012";
 
-    @Override
-    public String getCode() {
-        return "000012";
+    public ContentLengthException(String message) {
+        super(CODE, message);
     }
 }

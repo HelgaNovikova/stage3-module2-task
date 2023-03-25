@@ -3,6 +3,7 @@ package com.mjc.school.repository.utils;
 import com.mjc.school.repository.impl.NewsRepository;
 import com.mjc.school.repository.model.AuthorModel;
 import com.mjc.school.repository.model.NewsModel;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
-public class DataSource {
+public class DataSource implements InitializingBean {
     public static final int DEFAULT_NEWS_COUNT_TO_GENERATE = 20;
     private final Map<Long, NewsModel> news = new HashMap<>();
     private final Map<Long, AuthorModel> authors = new HashMap<>();
@@ -83,5 +84,10 @@ public class DataSource {
             titlesFromFile.remove(indexT);
             authorsFromFile.remove(indexA);
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        generateNews("news", "authors", "content");
     }
 }

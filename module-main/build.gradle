@@ -7,12 +7,10 @@ plugins {
 mainClassName = 'com.mjc.school.Main'
 
 dependencies {
-    implementation project(':module-repository')
-    implementation project(':module-service')
     implementation project(':module-web')
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework:spring-core:6.0.6'
-    implementation 'org.springframework:spring-context:6.0.6'
+    implementation "org.springframework:spring-core:$springVersion"
+    implementation "org.springframework:spring-context:$springVersion"
 }
 
 run {

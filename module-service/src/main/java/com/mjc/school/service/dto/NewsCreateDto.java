@@ -6,6 +6,9 @@ public class NewsCreateDto {
     String content;
     Long id;
 
+    public NewsCreateDto() {
+    }
+
     public NewsCreateDto(Long id, String title, String content, Long authorId) {
         this.authorId = authorId;
         this.title = title;
